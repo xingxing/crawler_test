@@ -11,9 +11,9 @@ module Crawl
   class << self
 
     # 嗅探n个公司
-    def sniffing n=1
+    def sniffing n=1000
 
-      company_id = 1
+      company_id = 5
       company_infos = [] #=> [company1, company2 ... ]
       file = File.new("companys", "a+")
 
@@ -34,15 +34,15 @@ module Crawl
           end
 
           file.puts company_info.to_json
-          
+          file.flush
           company_id += 1
-        # rescue Exception => e
-        #   puts "Exception: --- "+e.message
-        #   company_id += 1
+        rescue Exception => e
+          puts "Exception: --- "+e.message
+          company_id += 1
         end
       end
 
-      until company_infos.size == 1
+      until company_infos.size == n
         add.call
       end
       
